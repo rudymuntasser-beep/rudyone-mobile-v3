@@ -1,10 +1,13 @@
 {
-  "name": "RudyOne Mobile V3",
-  "short_name": "Starship V3",
+  "name": "STARSHIP",
+  "short_name": "STARSHIP",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#02050b",
   "theme_color": "#02050b",
-  "icons": []
+  "icons": [
+    {"src":"icons/starship-192.webp","sizes":"192x192","type":"image/webp","purpose":"any maskable"},
+    {"src":"icons/starship-512.webp","sizes":"512x512","type":"image/webp","purpose":"any maskable"}
+  ]
 }
