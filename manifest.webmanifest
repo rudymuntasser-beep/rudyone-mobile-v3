@@ -1,0 +1,10 @@
+{
+  "name": "RudyOne Mobile V3",
+  "short_name": "Starship V3",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#02050b",
+  "theme_color": "#02050b",
+  "icons": []
+}
