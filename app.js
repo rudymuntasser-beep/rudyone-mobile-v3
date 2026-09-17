@@ -1,6 +1,7 @@
 import {groupMetrics,toneClass,formatFire} from './ui-core.js?v=1';
 import {metricExplanation,shipExplanation} from './explanations.js?v=1';
 import {officerForMetric,officerForGroup,officerInfo} from './officers.js?v=1';
+import {initCommanderConsole} from './commander-console.js?v=1';
 const BASE='https://aropywroudfriiqbmwhp.supabase.co/functions/v1';
 const AUTH=BASE+'/starship-v3-mobile-auth';
 const DATA=BASE+'/starship-v3-mobile-data';
@@ -35,4 +36,6 @@ function openShipStatus(){if(!dashboard)return;const x=shipExplanation(dashboard
 function prepareDraft(action,context){const box=$('commandDraft');if(!box)return;if(action==='Chiedi a GPT')box.value=`Spiegami ${context}: cosa sta succedendo, perché e cosa richiede attenzione.`;else if(action==='Prepara ordine')box.value=`Ordine su ${context}: `;else box.value=`Apri e spiegami ${context}.`;box.focus()}
 document.addEventListener('click',e=>{const m=e.target.closest('.metric');if(m)openMetric(m.dataset.key);const n=e.target.closest('.navBtn');if(n)renderGroup(n.dataset.group);const a=e.target.closest('.actionBtn');if(a)prepareDraft(a.dataset.action,a.dataset.context);const o=e.target.closest('[data-officer]');if(o&&!o.closest('.metric'))openOfficer(o.dataset.officer)});
 $('refresh').onclick=openDashboard;retry.onclick=()=>location.reload();enter.onclick=enroll;code.addEventListener('keydown',e=>{if(e.key==='Enter')enroll()});closeDrawer.onclick=()=>drawer.hidden=true;drawer.addEventListener('click',e=>{if(e.target===drawer)drawer.hidden=true});shipStatus.onclick=openShipStatus;
+initCommanderConsole({getDashboard:()=>dashboard,openOfficer,openMetric,renderGroup});
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./service-worker.js').catch(()=>{})}
 (async()=>{if(new URLSearchParams(location.search).get('reset')==='1'){localStorage.removeItem(DK);clearSession()}const q=await sessionFromDevice();if(q.kind==='OK')return openDashboard();if(q.kind==='NO_DEVICE'||q.kind==='REVOKED')return showGate();showError('Starship non raggiungibile. Il telefono resta autorizzato. '+(q.message||''))})();
