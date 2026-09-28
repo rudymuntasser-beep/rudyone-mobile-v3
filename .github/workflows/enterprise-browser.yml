@@ -1,6 +1,11 @@
 name: ENTERPRISE Browser Worker
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'enterprise-browser/**'
+      - '.github/workflows/enterprise-browser.yml'
   schedule:
     - cron: '*/30 * * * *'
 permissions:
