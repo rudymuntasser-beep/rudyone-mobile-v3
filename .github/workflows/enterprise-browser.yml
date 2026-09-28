@@ -1,0 +1,35 @@
+name: ENTERPRISE Browser Worker
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/30 * * * *'
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  careers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Request GitHub OIDC token
+        id: oidc
+        shell: bash
+        run: |
+          RESP=$(curl -sS -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=enterprise-browser")
+          TOKEN=$(echo "$RESP" | python -c "import sys,json; print(json.load(sys.stdin)['value'])")
+          echo "::add-mask::$TOKEN"
+          echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
+      - name: Install browser worker
+        working-directory: enterprise-browser
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+      - name: Run one CAREERS job
+        working-directory: enterprise-browser
+        env:
+          ENTERPRISE_OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
+        run: npm start
