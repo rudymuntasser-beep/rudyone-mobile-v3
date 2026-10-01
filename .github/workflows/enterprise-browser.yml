@@ -1,13 +1,6 @@
-name: ENTERPRISE Browser Worker
+name: ENTERPRISE Browser Worker — Legacy Manual Only
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'enterprise-browser/**'
-      - '.github/workflows/enterprise-browser.yml'
-  schedule:
-    - cron: '*/30 * * * *'
 permissions:
   contents: read
   id-token: write
@@ -28,12 +21,12 @@ jobs:
           TOKEN=$(echo "$RESP" | python -c "import sys,json; print(json.load(sys.stdin)['value'])")
           echo "::add-mask::$TOKEN"
           echo "token=$TOKEN" >> "$GITHUB_OUTPUT"
-      - name: Install browser worker
+      - name: Install legacy browser worker
         working-directory: enterprise-browser
         run: |
           npm install --no-audit --no-fund
           npx playwright install --with-deps chromium
-      - name: Run one CAREERS job
+      - name: Run legacy dry-run manually
         working-directory: enterprise-browser
         env:
           ENTERPRISE_OIDC_TOKEN: ${{ steps.oidc.outputs.token }}
